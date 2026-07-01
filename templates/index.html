@@ -69,6 +69,25 @@
                 See How it Works
             </a>
           </div>
+
+          <!-- Stars Row -->
+           <div class="flex flex-wrap justify-center gap-10 text-center mt-16">
+    <div>
+        <p class="text-3xl font-bold text-white" id="stat-accuracy">0%</p>
+        <p class="text-xs text-slate-500 mt-1">Detection Accuracy</p>
+    </div>
+    <div class="w-px bg-white/10 hidden sm:block"></div>
+    <div>
+        <p class="text-3xl font-bold text-white" id="stat-speed">0s</p>
+        <p class="text-xs text-slate-500 mt-1">Analysis Time</p>
+    </div>
+    <div class="w-px bg-white/10 hidden sm:block"></div>
+    <div>
+        <p class="text-3xl font-bold text-white">Real-Time</p>
+        <p class="text-xs text-slate-500 mt-1">Inventory Updates</p>
+    </div>
+</div>
+
     </section>
 
     <!-- Features Section -->
@@ -124,13 +143,33 @@
                 Track detection history, view trends, and export reports over time.
             </p>
         </div>
-        
+
         </div>
 
      </section>
 
    </main>
+<script>
+    function animateCount(elementId, target, suffix, duration) {
+        const element = document.getElementById(elementId);
+        let startTime = null;
 
+        function step(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            const currentValue = Math.floor(progress * target);
+            element.textContent = currentValue + suffix;
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    animateCount('stat-accuracy', 95, '%', 1500);
+    animateCount('stat-speed', 3, 's', 1500);
+</script>
 </body>
 </html>
 
