@@ -169,6 +169,36 @@
 
     animateCount('stat-accuracy', 95, '%', 1500);
     animateCount('stat-speed', 3, 's', 1500);
+
+    // Hover glow effect on interactive elements
+const glowElements = document.querySelectorAll('.glass-card, a, button');
+
+glowElements.forEach(el => {
+    el.addEventListener('mousemove', function(e) {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        //Inner spotlight follows cursor
+
+        el.style.background =`radial-gradient(circle at ${x}px ${y}px, 
+                rgba(167, 78, 246, 0.19),
+                rgba(236, 72, 153, 0.09) 60%,
+                transparent 80%)`;
+        //Boreder glow effect
+        el.style.transition = '1px solid rgba(167, 78, 246, 0.9)';
+        el.style.boxShadow = '0 0 22px rgba(167,78,246,0.6), 0 0 60px rgba(236, 72, 153, 0.3), 0 0 90px rgba(236, 72, 153, 0.2)';
+        el.style.transition = 'all 0.2s ease';
+    });
+
+
+    el.addEventListener('mouseleave', function() {
+        el.style.background = '';
+        el.style.border = '';
+        el.style.boxShadow = '';
+        el.style.transition = 'all 0.4s ease';
+    });
+});
 </script>
 </body>
 </html>
