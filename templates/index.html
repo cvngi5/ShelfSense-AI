@@ -377,6 +377,30 @@ function showPreview(file) {
     };
     reader.readAsDataURL(file);
 }
+
+analyzeBtn.addEventListener('click', function() {
+    const file =fileInput.files[0];
+    if(!file) return;
+    // Here you would typically send the file to your server for analysis
+
+    analyzeBtn.textContent = '⟲ Analyzing...';
+    analyzeBtn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch('/analyze', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        alert(data);
+        analyzeBtn.textContent = '✦ Analyze Shelf';
+        analyzeBtn.disabled = false;
+    });
+});
 </script>
 </body>
 </html>
