@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 
 app = Flask(__name__)
@@ -22,7 +22,10 @@ def analyze():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(filepath)
     
-    return f"saved: {file.filename}"
+    from detect import detect_objects
+    detections = detect_objects(filepath)
+    
+    return jsonify({"status": "success", "detections": detections})
 
 
 if __name__ == '__main__':
