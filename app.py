@@ -47,6 +47,24 @@ def analyze():
     
     return jsonify({"status": "success", "detections": detections})
 
+@app.route('/history', methods = ['GET'])
+def history():
+    # Implement history retrieval logic here
+    from database import get_all_detections
+    
+    rows = get_all_detections()
+    
+    data = []
+    for row in rows:
+        data.append({
+            "id": row[0],
+            "timestamp": row[1],
+            "class_name": row[2],
+            "count": row[3],
+            "avg_confidence": row[4]
+        })
+    return jsonify({"history": data})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
