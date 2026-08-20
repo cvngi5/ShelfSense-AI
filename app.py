@@ -3,7 +3,8 @@ import os
 import time
 
 from detect import detect_objects
-from database import save_detection
+from database import create_scan, save_detection, get_all_scans
+
 
 app = Flask(__name__)
 
@@ -37,32 +38,46 @@ def analyze():
     detections = detect_objects(filepath)
     
     print("YOLO DONE:", time.time() - start)
+    #create one scan for this image       
+    scan_id = create_scan("CAMERA_A1", "SHELF_A1")
     
+    #save each detected object under this scan
     for class_name, data in detections.items():
-        save_detection(class_name, data['count'], data['avg_confidence'])
-        
+       save_detection(
+              scan_id,
+              class_name,
+              data['count'],
+              data['avg_confidence']
+       )
+    
     print("DATABASE DONE:", time.time() - start)
     print("TOTAL TIME TAKEN:", time.time() - start)
-        
     
-    return jsonify({"status": "success", "detections": detections})
-
+    return jsonify({
+        "status": "success",
+        "scan_id": scan_id,
+        "detections": detections
+    })
+       
 @app.route('/history', methods = ['GET'])
 def history():
     # Implement history retrieval logic here
-    from database import get_all_detections
     
-    rows = get_all_detections()
+    rows = get_all_scans()
     
     data = []
+    
     for row in rows:
         data.append({
-            "id": row[0],
+            "scan_id": row[0],
             "timestamp": row[1],
-            "class_name": row[2],
-            "count": row[3],
-            "avg_confidence": row[4]
+            "camera_id": row[2],
+            "shelf_id": row[3],
+            "class_name": row[4],
+            "count": row[5],
+            "avg_confidence": row[6]
         })
+        
     return jsonify({"history": data})
     
 
